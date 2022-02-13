@@ -13,6 +13,7 @@ import com.neioalves.cursomc.domain.Cidade;
 import com.neioalves.cursomc.domain.Cliente;
 import com.neioalves.cursomc.domain.Endereco;
 import com.neioalves.cursomc.domain.Estado;
+import com.neioalves.cursomc.domain.ItemPedido;
 import com.neioalves.cursomc.domain.Pagamento;
 import com.neioalves.cursomc.domain.PagamentoComBoleto;
 import com.neioalves.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.neioalves.cursomc.repositories.CidadeRepository;
 import com.neioalves.cursomc.repositories.ClienteRepository;
 import com.neioalves.cursomc.repositories.EnderecoRepository;
 import com.neioalves.cursomc.repositories.EstadoRepository;
+import com.neioalves.cursomc.repositories.ItemPedidoRepository;
 import com.neioalves.cursomc.repositories.PagamentoRepository;
 import com.neioalves.cursomc.repositories.PedidoRepository;
 import com.neioalves.cursomc.repositories.ProdutoRepository;
@@ -55,6 +57,9 @@ public class CursomcApplication implements CommandLineRunner{
 	
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -98,6 +103,7 @@ public class CursomcApplication implements CommandLineRunner{
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
+		// CLIENTES E ENDEREÇOS
 		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
 		
@@ -107,6 +113,8 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		
+		//PEDIDOS E PAGAMENTOS
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		
@@ -123,6 +131,25 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		//ITEM_PEDIDO
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p1.getItens().addAll(Arrays.asList(ip3));
+		p1.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
+		
+		
+		
+		
 		
 		
 	}
