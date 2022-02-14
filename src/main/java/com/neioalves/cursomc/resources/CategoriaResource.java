@@ -43,5 +43,13 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 		
 	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	//O ResponseEntity é VOID pois ao ser apagado é retornado uma resposta com o corpo vazio
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+
+	}
 
 }
