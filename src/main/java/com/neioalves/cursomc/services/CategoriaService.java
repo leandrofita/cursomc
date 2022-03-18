@@ -5,9 +5,13 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.neioalves.cursomc.domain.Categoria;
+import com.neioalves.cursomc.dto.CategoriaDTO;
 import com.neioalves.cursomc.repositories.CategoriaRepository;
 import com.neioalves.cursomc.services.exceptions.DataIntegrityException;
 import com.neioalves.cursomc.services.exceptions.ObjectNotFoundException;
@@ -27,6 +31,13 @@ public class CategoriaService {
 	
 	public List<Categoria> findAll() {
 		return repo.findAll();
+	}
+	
+	//método para retorno paginado
+	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return repo.findAll(pageRequest);
+
 	}
 	
 	public Categoria insert(Categoria obj) {
@@ -50,6 +61,10 @@ public class CategoriaService {
 			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos");
 			
 		}
+	}
+	//recebe um Categoria e retorna uma CategoriaDto
+	public Categoria fromDto(CategoriaDTO objDto) {
+		return new Categoria(objDto.getId(), objDto.getNome());
 	}
 
 }
