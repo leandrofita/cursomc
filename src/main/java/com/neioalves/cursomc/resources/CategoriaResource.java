@@ -69,13 +69,19 @@ public class CategoriaResource {
 
 	}
 	
+<<<<<<< HEAD
 	//método do findAll paginado
+=======
+>>>>>>> fc3fb4ce6fc5c0d48c8d5252fa4933bb4e079004
 	@RequestMapping(value="/page", method = RequestMethod.GET)
 	public ResponseEntity<Page<CategoriaDTO>> findPage(
 			@RequestParam(value="page", defaultValue = "0") Integer page, 
 			@RequestParam(value="linesPerPage", defaultValue = "24")Integer linesPerPage, 
 			@RequestParam(value="orderBy", defaultValue = "nome")String orderBy, 
+<<<<<<< HEAD
 			//direction ASC ou DESC
+=======
+>>>>>>> fc3fb4ce6fc5c0d48c8d5252fa4933bb4e079004
 			@RequestParam(value="direction", defaultValue = "ASC")String direction) {
 		Page<Categoria> list = service.findPage(page, linesPerPage, orderBy, direction);
 		Page<CategoriaDTO> listDTO = list.map(obj -> new CategoriaDTO(obj));
