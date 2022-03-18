@@ -34,59 +34,55 @@ public class CategoriaResource {
 		return ResponseEntity.ok().body(obj);
 
 	}
-	//Método para retornar todas as categorias
+
+	// Método para retornar todas as categorias
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> findAll() {
 		List<Categoria> list = service.findAll();
-		//stream percorre a lista, o map efetua uma operação para cada elemento da lista (cria um novo objetoDTO e dps covernte para lista)
+		// stream percorre a lista, o map efetua uma operação para cada elemento da
+		// lista (cria um novo objetoDTO e dps covernte para lista)
 		List<CategoriaDTO> listDTO = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 
 	}
 
-	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDTO) {
-		Categoria obj = service.fromDto(objDTO);
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto) {
+		Categoria obj = service.fromDto(objDto);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
-
-	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
+		Categoria obj = service.fromDto(objDto);
 		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
-		
+
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	//O ResponseEntity é VOID pois ao ser apagado é retornado uma resposta com o corpo vazio
+	// O ResponseEntity é VOID pois ao ser apagado é retornado uma resposta com o
+	// corpo vazio
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 
 	}
-	
-<<<<<<< HEAD
-	//método do findAll paginado
-=======
->>>>>>> fc3fb4ce6fc5c0d48c8d5252fa4933bb4e079004
-	@RequestMapping(value="/page", method = RequestMethod.GET)
-	public ResponseEntity<Page<CategoriaDTO>> findPage(
-			@RequestParam(value="page", defaultValue = "0") Integer page, 
-			@RequestParam(value="linesPerPage", defaultValue = "24")Integer linesPerPage, 
-			@RequestParam(value="orderBy", defaultValue = "nome")String orderBy, 
-<<<<<<< HEAD
-			//direction ASC ou DESC
-=======
->>>>>>> fc3fb4ce6fc5c0d48c8d5252fa4933bb4e079004
-			@RequestParam(value="direction", defaultValue = "ASC")String direction) {
+
+	// método do findAll paginado
+
+	@RequestMapping(value = "/page", method = RequestMethod.GET)
+	public ResponseEntity<Page<CategoriaDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+			// direction ASC ou DESC
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 		Page<Categoria> list = service.findPage(page, linesPerPage, orderBy, direction);
 		Page<CategoriaDTO> listDTO = list.map(obj -> new CategoriaDTO(obj));
 		return ResponseEntity.ok().body(listDTO);
 	}
-	
 
 }
