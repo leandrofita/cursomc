@@ -47,9 +47,13 @@ public class CategoriaService {
 	}
 	
 	public Categoria update(Categoria obj) {
-		//Reaproveitando o método "find" para verificar se o ID existe ou não e disparar uma excessão
-		find(obj.getId());
-		return repo.save(obj);
+		Categoria newObj = find(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj);
+	}
+	//método auxiliar para atualização do cliente com base nos dados salvos no banco de dados
+	private void updateData (Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
 	}
 	
 	public void delete(Integer id) {
