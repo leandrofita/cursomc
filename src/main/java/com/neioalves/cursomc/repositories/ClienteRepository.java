@@ -13,6 +13,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer>{
 	
 	// deixa a operação mais rápida e não necessita que a operação seja envolvida em uma transação de banco de dados
 	@Transactional(readOnly = true)
+	//operação criada pelo próprio framework
 	Cliente findByEmail(String email);
 
 }
