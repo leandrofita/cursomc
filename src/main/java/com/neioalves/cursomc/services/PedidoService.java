@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.neioalves.cursomc.domain.ItemPedido;
 import com.neioalves.cursomc.domain.PagamentoComBoleto;
@@ -33,6 +34,10 @@ public class PedidoService {
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
 	
+	
+	@Autowired
+	private ClienteService clienteService;
+	
 	/*Tenta buscar uma categoria por id, caso não consiga lança uma exceção personalizada*/
 	public Pedido find(Integer id) {
 		Optional<Pedido> obj = repo.findById(id);
@@ -42,9 +47,11 @@ public class PedidoService {
 	
 	//Método para inserção de um pedido
 	
+	@Transactional
 	public Pedido insert(Pedido obj) {
 		obj.setId(null);
 		obj.setInstante(new Date());
+		obj.setCliente(clienteService.find(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
 		//instanceof is a binary operator used to test if an object is of a given type. The result of the operation is either true or false.
@@ -59,10 +66,12 @@ public class PedidoService {
 		for(ItemPedido ip : obj.getItens()) {
 			ip.setDesconto(0.0);
 			//obtendo o preço dos produtos
-			ip.setPreco(produtoService.find(ip.getProduto().getId()).getPreco());
+			ip.setProduto(produtoService.find(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
+		System.out.println(obj);
 		return obj;
 	}
 
